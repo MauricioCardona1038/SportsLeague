@@ -82,6 +82,9 @@ namespace SportsLeague.Domain.Services
 
         public async Task<IEnumerable<TournamentSponsor>> GetBySponsorIdAsync(int sponsorId)
         {
+            if (!await _sponsorRepository.ExistsAsync(sponsorId))
+                throw new KeyNotFoundException($"Sponsor con ID {sponsorId} no existe");
+
             return await _tournamentSponsorRepository.GetBySponsorIdAsync(sponsorId);
         }
     }
