@@ -26,18 +26,19 @@ namespace SportsLeague.API.Controllers
         }
 
         // Vincular sponsor a torneo
-        [HttpPost]
-        public async Task<ActionResult<TournamentSponsorResponseDTO>> AddSponsorToTournament(TournamentSponsorRequestDTO dto)
+        [HttpPost("{id}/tournaments")]
+        public async Task<ActionResult<TournamentSponsorResponseDTO>> AddSponsorToTournament(int id, TournamentSponsorRequestDTO dto)
         {
             try
             {
                 var result = await _tournamentSponsorService.AddSponsorToTournamentAsync(
                     dto.TournamentId,
-                    dto.SponsorId,
+                    id, // SponsorId viene de la URL
                     dto.ContractAmount);
 
                 var response = _mapper.Map<TournamentSponsorResponseDTO>(result);
-                return Ok(response);
+
+                return CreatedAtAction(nameof(GetTournamentsBySponsor), new { id = id }, response);
             }
             catch (KeyNotFoundException ex)
             {

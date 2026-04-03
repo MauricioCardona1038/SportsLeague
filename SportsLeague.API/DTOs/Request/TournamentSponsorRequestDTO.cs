@@ -3,7 +3,6 @@
     public class TournamentSponsorRequestDTO
     {
         public int TournamentId { get; set; }
-        public int SponsorId { get; set; }
         public decimal ContractAmount { get; set; }
     }
 }
