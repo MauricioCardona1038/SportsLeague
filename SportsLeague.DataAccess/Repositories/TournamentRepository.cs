@@ -27,7 +27,7 @@ namespace SportsLeague.DataAccess.Repositories
         {
             return await _dbSet
                 .Include(t => t.TournamentTeams)
-                    .ThenInclude(tt => tt.Team)
+                .ThenInclude(tt => tt.Team)
                 .FirstOrDefaultAsync(t => t.Id == id);
         }
     }

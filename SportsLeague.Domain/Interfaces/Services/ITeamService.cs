@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using SportsLeague.Domain.Entities;
+﻿using SportsLeague.Domain.Entities;
 
 namespace SportsLeague.Domain.Interfaces.Services
 {
