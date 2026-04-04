@@ -6,6 +6,7 @@
         public string TournamentName { get; set; } = string.Empty;
         public int SponsorId { get; set; }
         public string SponsorName { get; set; } = string.Empty;
+        public string SponsorCategory { get; set; } = null!;
         public decimal ContractAmount { get; set; }
         public DateTime JoinedAt { get; set; }
     }

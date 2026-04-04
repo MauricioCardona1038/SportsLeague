@@ -17,7 +17,8 @@ namespace SportsLeague.DataAccess.Repositories
         {
             return await _context.TournamentSponsors
                 .Where(ts => ts.TournamentId == tournamentId)
-                .Include(ts => ts.Sponsor) 
+                .Include(ts => ts.Sponsor)
+                .Include(ts => ts.Tournament)
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -26,7 +27,8 @@ namespace SportsLeague.DataAccess.Repositories
         {
             return await _context.TournamentSponsors
                 .Where(ts => ts.SponsorId == sponsorId)
-                .Include(ts => ts.Tournament)
+                .Include(ts => ts.Sponsor)      
+                .Include(ts => ts.Tournament)   
                 .AsNoTracking()
                 .ToListAsync();
         }

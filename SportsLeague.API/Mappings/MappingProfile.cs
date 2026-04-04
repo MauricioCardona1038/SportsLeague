@@ -48,7 +48,9 @@ namespace SportsLeague.API.Mappings
                     opt => opt.MapFrom(src => src.Tournament.Name))
                 .ForMember(
                     dest => dest.SponsorName,
-                    opt => opt.MapFrom(src => src.Sponsor.Name));
+                    opt => opt.MapFrom(src => src.Sponsor.Name))
+                .ForMember(dest => dest.SponsorCategory,
+                    opt => opt.MapFrom(src => src.Sponsor.Category.ToString()));
 
 
         }
