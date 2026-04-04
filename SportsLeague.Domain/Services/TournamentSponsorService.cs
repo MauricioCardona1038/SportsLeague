@@ -62,7 +62,14 @@ namespace SportsLeague.Domain.Services
                 "Vinculando sponsor {SponsorId} al torneo {TournamentId}",
                 sponsorId, tournamentId);
 
-            return await _tournamentSponsorRepository.CreateAsync(tournamentSponsor);
+            // Guardar
+            await _tournamentSponsorRepository.CreateAsync(tournamentSponsor);
+
+            // VOLVER A CONSULTAR CON INCLUDE
+            var created = await _tournamentSponsorRepository
+                .GetByTournamentAndSponsorAsync(tournamentId, sponsorId);
+
+            return created!;
         }
 
         public async Task RemoveSponsorFromTournamentAsync(int tournamentId, int sponsorId)

@@ -38,7 +38,7 @@ namespace SportsLeague.API.Controllers
 
                 var response = _mapper.Map<TournamentSponsorResponseDTO>(result);
 
-                return CreatedAtAction(nameof(GetTournamentsBySponsor), new { id = id }, response);
+                return StatusCode(201, response);
             }
             catch (KeyNotFoundException ex)
             {
