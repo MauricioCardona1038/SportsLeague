@@ -33,5 +33,14 @@ namespace SportsLeague.Domain.Entities
 
         public Referee Referee { get; set; } = null!;
 
+        // Relación 1:1 con resultado
+        public MatchResult? MatchResult { get; set; }
+
+        // Relación 1:N con goles y tarjetas
+        public ICollection<Goal> Goals { get; set; } = new List<Goal>();
+        public ICollection<Card> Cards { get; set; } = new List<Card>();
+
+
+
     }
 }
