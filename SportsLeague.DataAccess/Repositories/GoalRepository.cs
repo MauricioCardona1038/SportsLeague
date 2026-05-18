@@ -20,7 +20,9 @@ namespace SportsLeague.DataAccess.Repositories
 
             .Where(g => g.MatchId == matchId)
 
-            .OrderBy(g => g.Minute)
+            .OrderBy(g => g.Minute) // Ordenar de forma ascendente por el minuto del gol
+
+            //.OrderByDescending(g => g.Type) // Ordenar de forma descendente por el tipo de gol (penalti, jugada, etc.)
 
             .ToListAsync();
 
@@ -36,6 +38,9 @@ namespace SportsLeague.DataAccess.Repositories
             .Where(g => g.MatchId == matchId)
 
             .Include(g => g.Player)
+            //.ThenInclude(p => p.Team)              cuando quiero mas detalles, como el equipo del jugador
+            //.ThenInclude(t => t.TournamentTeams) cuando quiero más detalles, como los torneos en los que participa el equipo del jugador
+            //.ThenInclude(tt => tt.Tournament) cuando quiero más detalles, como los torneos en los que participa el equipo del jugador 
 
             .OrderBy(g => g.Minute)
 

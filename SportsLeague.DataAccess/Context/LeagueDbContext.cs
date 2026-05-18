@@ -314,7 +314,7 @@ namespace SportsLeague.DataAccess.Context
 
                 entity.HasOne(mr => mr.Match)
 
-                .WithOne(m => m.MatchResult)
+                .WithOne(m => m.MatchResult) // Aquí es donde se define la relación 1:1
 
                 .HasForeignKey<MatchResult>(mr => mr.MatchId)
 
