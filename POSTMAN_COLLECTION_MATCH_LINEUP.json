@@ -1,0 +1,272 @@
+{
+  "info": {
+    "name": "Match Lineup - Validation Tests",
+    "description": "Colección completa de pruebas para Match Lineup API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "PREPARACIÓN",
+      "item": [
+        {
+          "name": "1. GET - Obtener partidos Scheduled",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:5001/api/match",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5001",
+              "path": ["api", "match"]
+            },
+            "description": "Obtener lista de partidos para copiar matchId con Status=0 (Scheduled)\nGUARDAR: matchId, homeTeamId, awayTeamId"
+          }
+        },
+        {
+          "name": "2. GET - Obtener jugadores",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:5001/api/player",
+              "protocol": "https",
+              "host": ["localhost"],
+              "port": "5001",
+              "path": ["api", "player"]
+            },
+            "description": "Obtener lista de jugadores para copiar playerIds\nFiltrar por TeamId para obtener jugadores del HomeTeam y AwayTeam"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ESCENARIO 1 - POST Titular HomeTeam",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"playerId\": 5, \"isStarter\": true, \"position\": \"GK\"}"
+        },
+        "url": {
+          "raw": "https://localhost:5001/api/match/3/lineup",
+          "protocol": "https",
+          "host": ["localhost"],
+          "port": "5001",
+          "path": ["api", "match", "3", "lineup"]
+        },
+        "description": "✅ ESPERADO: 201 Created\nResponde con MatchLineupDto completo\nGUARDAR: El 'id' para usar en DELETE"
+      }
+    },
+    {
+      "name": "ESCENARIO 2 - POST Suplente AwayTeam",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"playerId\": 20, \"isStarter\": false, \"position\": \"ST\"}"
+        },
+        "url": {
+          "raw": "https://localhost:5001/api/match/3/lineup",
+          "protocol": "https",
+          "host": ["localhost"],
+          "port": "5001",
+          "path": ["api", "match", "3", "lineup"]
+        },
+        "description": "✅ ESPERADO: 201 Created\nisStarter = false, sin límite de suplentes"
+      }
+    },
+    {
+      "name": "ESCENARIO 3 - POST Jugador Duplicado (409)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"playerId\": 5, \"isStarter\": false, \"position\": \"LW\"}"
+        },
+        "url": {
+          "raw": "https://localhost:5001/api/match/3/lineup",
+          "protocol": "https",
+          "host": ["localhost"],
+          "port": "5001",
+          "path": ["api", "match", "3", "lineup"]
+        },
+        "description": "❌ ESPERADO: 409 Conflict\nMensaje: 'El jugador ya está registrado en la alineación de este partido'\nValidación V4"
+      }
+    },
+    {
+      "name": "ESCENARIO 4 - POST Equipo Diferente (409)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"playerId\": 50, \"isStarter\": true, \"position\": \"CM\"}"
+        },
+        "url": {
+          "raw": "https://localhost:5001/api/match/3/lineup",
+          "protocol": "https",
+          "host": ["localhost"],
+          "port": "5001",
+          "path": ["api", "match", "3", "lineup"]
+        },
+        "description": "❌ ESPERADO: 409 Conflict\nMensaje: 'El jugador no pertenece a ninguno de los equipos del partido'\nValidación V3\nNota: playerId 50 debe ser de un equipo diferente a 1 y 2"
+      }
+    },
+    {
+      "name": "ESCENARIO 5a - POST x11 Titulares (201 x11)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "[{\"playerId\": 5, \"isStarter\": true, \"position\": \"GK\"}, {\"playerId\": 6, \"isStarter\": true, \"position\": \"CB\"}, {\"playerId\": 7, \"isStarter\": true, \"position\": \"CB\"}, {\"playerId\": 8, \"isStarter\": true, \"position\": \"LB\"}, {\"playerId\": 9, \"isStarter\": true, \"position\": \"RB\"}, {\"playerId\": 10, \"isStarter\": true, \"position\": \"CDM\"}, {\"playerId\": 11, \"isStarter\": true, \"position\": \"CDM\"}, {\"playerId\": 12, \"isStarter\": true, \"position\": \"CM\"}, {\"playerId\": 13, \"isStarter\": true, \"position\": \"LW\"}, {\"playerId\": 14, \"isStarter\": true, \"position\": \"RW\"}, {\"playerId\": 15, \"isStarter\": true, \"position\": \"ST\"}]"
+        },
+        "url": {
+          "raw": "https://localhost:5001/api/match/3/lineup",
+          "protocol": "https",
+          "host": ["localhost"],
+          "port": "5001",
+          "path": ["api", "match", "3", "lineup"]
+        },
+        "description": "✅ ESPERADO: 201 Created (11 veces)\nAgregar 11 titulares del HomeTeam\nEjecuta manualmente cada request, incrementando playerId"
+      }
+    },
+    {
+      "name": "ESCENARIO 5b - POST 12° Titular (409)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"playerId\": 16, \"isStarter\": true, \"position\": \"CAM\"}"
+        },
+        "url": {
+          "raw": "https://localhost:5001/api/match/3/lineup",
+          "protocol": "https",
+          "host": ["localhost"],
+          "port": "5001",
+          "path": ["api", "match", "3", "lineup"]
+        },
+        "description": "❌ ESPERADO: 409 Conflict\nMensaje: 'El equipo ya tiene 11 titulares registrados en este partido'\nValidación V5\nNota: Ejecutar después de agregar 11 titulares en Escenario 5a"
+      }
+    },
+    {
+      "name": "ESCENARIO 6 - POST Partido Finished (409)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"playerId\": 5, \"isStarter\": true, \"position\": \"GK\"}"
+        },
+        "url": {
+          "raw": "https://localhost:5001/api/match/1/lineup",
+          "protocol": "https",
+          "host": ["localhost"],
+          "port": "5001",
+          "path": ["api", "match", "1", "lineup"]
+        },
+        "description": "❌ ESPERADO: 409 Conflict\nMensaje: 'Solo se pueden registrar alineaciones en partidos Scheduled'\nValidación V6\nNota: matchId 1 debe estar en Status Finished (Status=2)\nReemplazar con matchId correcto si es necesario"
+      }
+    },
+    {
+      "name": "ESCENARIO 7 - GET Alineación Completa",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://localhost:5001/api/match/3/lineup",
+          "protocol": "https",
+          "host": ["localhost"],
+          "port": "5001",
+          "path": ["api", "match", "3", "lineup"]
+        },
+        "description": "✅ ESPERADO: 200 OK\nRespuesta: Array de MatchLineupDto\nContiene todos los jugadores agregados en Escenarios 1 y 2\nOrdenados: Titulares primero (isStarter DESC), luego por Position"
+      }
+    },
+    {
+      "name": "ESCENARIO 8 - GET Alineación por Equipo",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://localhost:5001/api/match/3/lineup/team/1",
+          "protocol": "https",
+          "host": ["localhost"],
+          "port": "5001",
+          "path": ["api", "match", "3", "lineup", "team", "1"]
+        },
+        "description": "✅ ESPERADO: 200 OK\nRespuesta: Array de MatchLineupDto solo del HomeTeam (teamId=1)\nNota: Reemplazar 1 con el awayTeamId (2) para filtrar por AwayTeam"
+      }
+    },
+    {
+      "name": "ESCENARIO 9 - DELETE Jugador",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "https://localhost:5001/api/match/3/lineup/1",
+          "protocol": "https",
+          "host": ["localhost"],
+          "port": "5001",
+          "path": ["api", "match", "3", "lineup", "1"]
+        },
+        "description": "✅ ESPERADO: 204 No Content\nSin body en respuesta\nLineupId=1 (el 'id' obtenido en Escenario 1)\nVerificación: Ejecutar GET (Escenario 7) para confirmar eliminación"
+      }
+    },
+    {
+      "name": "ESCENARIO 10 - DELETE No Existe (404)",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "https://localhost:5001/api/match/3/lineup/99999",
+          "protocol": "https",
+          "host": ["localhost"],
+          "port": "5001",
+          "path": ["api", "match", "3", "lineup", "99999"]
+        },
+        "description": "❌ ESPERADO: 404 Not Found\nMensaje: 'No se encontró la alineación con ID 99999 en el partido 3'\nValidación de inexistencia"
+      }
+    }
+  ]
+}
