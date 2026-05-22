@@ -1,0 +1,296 @@
+{
+  "info": {
+    "_postman_id": "match-lineup-tests",
+    "name": "Match Lineup Tests",
+    "description": "Colección de pruebas para Match Lineup - Fase 7",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. POST Jugador Titular HomeTeam (201)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 201 Created', function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "",
+              "pm.test('Response contiene ID de lineup', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.id).to.be.a('number');",
+              "});",
+              "",
+              "// Guardar ID para pruebas posteriores",
+              "var jsonData = pm.response.json();",
+              "pm.environment.set('lineup1Id', jsonData.id);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"playerId\": 1, \"isStarter\": true, \"position\": \"GK\"}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/match/{{matchId}}/lineup",
+          "host": ["{{baseUrl}}"],
+          "path": ["match", "{{matchId}}", "lineup"]
+        }
+      }
+    },
+    {
+      "name": "2. POST Jugador Suplente AwayTeam (201)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 201 Created', function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "",
+              "pm.test('IsStarter es false', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.isStarter).to.be.false;",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"playerId\": 3, \"isStarter\": false, \"position\": \"ST\"}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/match/{{matchId}}/lineup",
+          "host": ["{{baseUrl}}"],
+          "path": ["match", "{{matchId}}", "lineup"]
+        }
+      }
+    },
+    {
+      "name": "3. POST Jugador Duplicado (409 Conflict)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 409 Conflict', function () {",
+              "    pm.response.to.have.status(409);",
+              "});",
+              "",
+              "pm.test('Mensaje contiene \"ya está registrado\"', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.message).to.include('ya está registrado');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"playerId\": 1, \"isStarter\": true, \"position\": \"GK\"}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/match/{{matchId}}/lineup",
+          "host": ["{{baseUrl}}"],
+          "path": ["match", "{{matchId}}", "lineup"]
+        }
+      }
+    },
+    {
+      "name": "4. POST Jugador No Pertenece (409 Conflict)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 409 Conflict', function () {",
+              "    pm.response.to.have.status(409);",
+              "});",
+              "",
+              "pm.test('Mensaje contiene \"no pertenece\"', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.message).to.include('no pertenece');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"playerId\": 999, \"isStarter\": true, \"position\": \"CB\"}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/match/{{matchId}}/lineup",
+          "host": ["{{baseUrl}}"],
+          "path": ["match", "{{matchId}}", "lineup"]
+        }
+      }
+    },
+    {
+      "name": "7. GET Alineación Completa (200)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200 OK', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test('Response es array', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.be.an('array');",
+              "});",
+              "",
+              "pm.test('Al menos un elemento en alineación', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.length).to.be.greaterThan(0);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/match/{{matchId}}/lineup",
+          "host": ["{{baseUrl}}"],
+          "path": ["match", "{{matchId}}", "lineup"]
+        }
+      }
+    },
+    {
+      "name": "8. GET Alineación por Equipo (200)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200 OK', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test('Response es array', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.be.an('array');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/match/{{matchId}}/lineup/team/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["match", "{{matchId}}", "lineup", "team", "1"]
+        }
+      }
+    },
+    {
+      "name": "9. DELETE Jugador de Alineación (204)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 204 No Content', function () {",
+              "    pm.response.to.have.status(204);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/match/{{matchId}}/lineup/{{lineup1Id}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["match", "{{matchId}}", "lineup", "{{lineup1Id}}"]
+        }
+      }
+    },
+    {
+      "name": "10. DELETE ID Inexistente (404)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 404 Not Found', function () {",
+              "    pm.response.to.have.status(404);",
+              "});",
+              "",
+              "pm.test('Mensaje contiene \"No se encontró\"', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.message).to.include('No se encontró');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/match/{{matchId}}/lineup/9999",
+          "host": ["{{baseUrl}}"],
+          "path": ["match", "{{matchId}}", "lineup", "9999"]
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000/api"
+    },
+    {
+      "key": "matchId",
+      "value": "1"
+    },
+    {
+      "key": "lineup1Id",
+      "value": ""
+    }
+  ]
+}
