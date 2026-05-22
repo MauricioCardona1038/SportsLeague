@@ -28,16 +28,12 @@ namespace SportsLeague.API.Controllers
         {
             try
             {
-                var lineup = new MatchLineup
-                {
-                    PlayerId = dto.PlayerId,
-                    IsStarter = dto.IsStarter,
-                    Position = dto.Position
-                };
+                var lineup = _mapper.Map<MatchLineup>(dto);
 
                 var result = await _matchLineupService.CreateLineupAsync(matchId, lineup);
 
-                return CreatedAtAction(nameof(GetLineupByMatch), new { matchId }, result);
+                var resultDto = _mapper.Map<MatchLineupDto>(result);
+                return CreatedAtAction(nameof(GetLineupByMatch), new { matchId }, resultDto);
             }
             catch (KeyNotFoundException ex)
             {
@@ -58,16 +54,7 @@ namespace SportsLeague.API.Controllers
             try
             {
                 var lineups = await _matchLineupService.GetLineupByMatchAsync(matchId);
-                var dtos = lineups.Select(l => new MatchLineupDto
-                {
-                    Id = l.Id,
-                    MatchId = l.MatchId,
-                    PlayerId = l.PlayerId,
-                    PlayerName = $"{l.Player.FirstName} {l.Player.LastName}",
-                    TeamName = l.Player.Team.Name,
-                    IsStarter = l.IsStarter,
-                    Position = l.Position
-                });
+                var dtos = _mapper.Map<IEnumerable<MatchLineupDto>>(lineups);
                 return Ok(dtos);
             }
             catch (KeyNotFoundException ex)
@@ -85,16 +72,7 @@ namespace SportsLeague.API.Controllers
             try
             {
                 var lineups = await _matchLineupService.GetLineupByMatchAndTeamAsync(matchId, teamId);
-                var dtos = lineups.Select(l => new MatchLineupDto
-                {
-                    Id = l.Id,
-                    MatchId = l.MatchId,
-                    PlayerId = l.PlayerId,
-                    PlayerName = $"{l.Player.FirstName} {l.Player.LastName}",
-                    TeamName = l.Player.Team.Name,
-                    IsStarter = l.IsStarter,
-                    Position = l.Position
-                });
+                var dtos = _mapper.Map<IEnumerable<MatchLineupDto>>(lineups);
                 return Ok(dtos);
             }
             catch (KeyNotFoundException ex)
