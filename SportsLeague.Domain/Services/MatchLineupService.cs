@@ -61,7 +61,10 @@ namespace SportsLeague.Domain.Services
             // Asignar el matchId y crear la alineación
             lineup.MatchId = matchId;
 
-            return await _matchLineupRepository.CreateAsync(lineup);
+            await _matchLineupRepository.CreateAsync(lineup);
+
+            // Recuperar la entidad completa con las navegaciones (Player y Team) para que AutoMapper pueda mapear PlayerName y TeamName
+            return await _matchLineupRepository.GetByMatchAndPlayerAsync(matchId, lineup.PlayerId);
         }
 
         public async Task<IEnumerable<MatchLineup>> GetLineupByMatchAsync(int matchId)

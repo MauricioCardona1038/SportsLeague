@@ -468,62 +468,7 @@ namespace SportsLeague.DataAccess.Seeders
             }
 
             await context.SaveChangesAsync();
-            // ═══ 6. GENERAR PARTIDOS Y RESULTADOS AUTOMÁTICOS (si no existen) ═══
-            // Esto permite que StandingsService tenga datos para calcular la tabla
-            if (!context.Matches.Any(m => m.TournamentId == tournament.Id))
-            {
-                var rand = new Random();
-                var createdMatches = new List<Match>();
-
-                // Crear un fixture simple (todos contra todos, una vuelta)
-                for (int i = 0; i < teams.Count; i++)
-                {
-                    for (int j = i + 1; j < teams.Count; j++)
-                    {
-                        var home = teams[i];
-                        var away = teams[j];
-                        var referee = referees[rand.Next(referees.Count)];
-
-                        var match = new Match
-                        {
-                            TournamentId = tournament.Id,
-                            HomeTeamId = home.Id,
-                            AwayTeamId = away.Id,
-                            RefereeId = referee.Id,
-                            MatchDate = DateTime.UtcNow.AddDays(rand.Next(-30, 30)),
-                            Venue = home.Stadium,
-                            Matchday = 1,
-                            Status = MatchStatus.Finished,
-                            CreatedAt = DateTime.UtcNow
-                        };
-
-                        createdMatches.Add(match);
-                    }
-                }
-
-                context.Matches.AddRange(createdMatches);
-                await context.SaveChangesAsync();
-
-                // Crear resultados aleatorios para cada partido
-                var results = new List<MatchResult>();
-                foreach (var m in createdMatches)
-                {
-                    var homeGoals = rand.Next(0, 5);
-                    var awayGoals = rand.Next(0, 5);
-
-                    results.Add(new MatchResult
-                    {
-                        MatchId = m.Id,
-                        HomeGoals = homeGoals,
-                        AwayGoals = awayGoals,
-                        Observations = "Auto-generated result",
-                        CreatedAt = DateTime.UtcNow
-                    });
-                }
-
-                context.MatchResults.AddRange(results);
-                await context.SaveChangesAsync();
-            }
+            
 
         }
 
