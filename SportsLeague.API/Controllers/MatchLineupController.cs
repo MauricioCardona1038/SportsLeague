@@ -20,9 +20,9 @@ namespace SportsLeague.API.Controllers
             _mapper = mapper;
         }
 
-        /// <summary>
+        
         /// POST: Agregar un jugador a la alineación de un partido
-        /// </summary>
+       
         [HttpPost]
         public async Task<ActionResult<MatchLineupDto>> CreateLineup(int matchId, CreateMatchLineupDto dto)
         {
@@ -45,9 +45,9 @@ namespace SportsLeague.API.Controllers
             }
         }
 
-        /// <summary>
+        
         /// GET: Obtener la alineación completa de un partido
-        /// </summary>
+     
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MatchLineupDto>>> GetLineupByMatch(int matchId)
         {
@@ -63,9 +63,9 @@ namespace SportsLeague.API.Controllers
             }
         }
 
-        /// <summary>
+        
         /// GET: Obtener la alineación filtrada por equipo
-        /// </summary>
+       
         [HttpGet("team/{teamId}")]
         public async Task<ActionResult<IEnumerable<MatchLineupDto>>> GetLineupByMatchAndTeam(int matchId, int teamId)
         {
@@ -81,9 +81,9 @@ namespace SportsLeague.API.Controllers
             }
         }
 
-        /// <summary>
+       
         /// DELETE: Eliminar un jugador de la alineación
-        /// </summary>
+ 
         [HttpDelete("{lineupId}")]
         public async Task<ActionResult> DeleteLineup(int matchId, int lineupId)
         {
