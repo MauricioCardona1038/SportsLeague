@@ -426,20 +426,22 @@ namespace SportsLeague.DataAccess.Context
 
                 entity.HasOne(ml => ml.Match)
 
-                    .WithMany(m => m.Lineups)
+                    .WithMany(m => m.Lineups) // Un Match puede tener muchos Lineups.
 
                     .HasForeignKey(ml => ml.MatchId)
 
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .OnDelete(DeleteBehavior.Cascade);// Si se elimina un partido (Match), también se eliminan automáticamente sus alineaciones.
+
 
 
                 entity.HasOne(ml => ml.Player)
 
-                    .WithMany(p => p.Lineups)
+                    .WithMany(p => p.Lineups) // Un jugador puede aparecer en muchas alineaciones.
 
                     .HasForeignKey(ml => ml.PlayerId)
 
-                    .OnDelete(DeleteBehavior.Restrict);
+                    .OnDelete(DeleteBehavior.Restrict); // Evita eliminar un jugador si tiene registros relacionados en MatchLineup.
+
 
 
                 // Índice único compuesto: un jugador solo una vez por partido
