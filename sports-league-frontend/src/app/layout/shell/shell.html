@@ -1,0 +1,16 @@
+<mat-toolbar color="primary" class="shell-toolbar">
+  <span class="shell-title">Gestión de Liga Deportiva</span>
+  <nav class="shell-nav">
+    <a mat-button routerLink="/torneos" routerLinkActive="active-link">Torneos</a>
+    <a mat-button routerLink="/equipos" routerLinkActive="active-link">Equipos</a>
+    <a mat-button routerLink="/jugadores" routerLinkActive="active-link">Jugadores</a>
+    <a mat-button routerLink="/arbitros" routerLinkActive="active-link">Árbitros</a>
+    <a mat-button routerLink="/patrocinadores" routerLinkActive="active-link">Patrocinadores</a>
+    <a mat-button routerLink="/partidos" routerLinkActive="active-link">Partidos</a>
+    <a mat-button routerLink="/estadisticas" routerLinkActive="active-link">Estadísticas</a>
+  </nav>
+</mat-toolbar>
+
+<main class="shell-content">
+  <router-outlet />
+</main>

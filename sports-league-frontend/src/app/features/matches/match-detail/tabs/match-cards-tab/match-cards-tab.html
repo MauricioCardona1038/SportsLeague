@@ -1,0 +1,59 @@
+<form [formGroup]="form" (ngSubmit)="addCard()" class="add-form">
+  <mat-form-field>
+    <mat-label>Jugador</mat-label>
+    <mat-select formControlName="playerId" required>
+      @for (player of players(); track player.id) {
+        <mat-option [value]="player.id">{{ player.firstName }} {{ player.lastName }} ({{ player.teamLabel }})</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Minuto</mat-label>
+    <input matInput type="number" min="1" formControlName="minute" required />
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Tipo</mat-label>
+    <mat-select formControlName="type" required>
+      @for (option of typeOptions; track option.value) {
+        <mat-option [value]="option.value">{{ option.label }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" type="submit">Agregar tarjeta</button>
+</form>
+
+@if (cards().length === 0) {
+  <p class="empty-state">No hay tarjetas registradas.</p>
+} @else {
+  <table mat-table [dataSource]="cards()" class="mat-elevation-z1">
+    <ng-container matColumnDef="playerName">
+      <th mat-header-cell *matHeaderCellDef>Jugador</th>
+      <td mat-cell *matCellDef="let card">{{ card.playerName }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="minute">
+      <th mat-header-cell *matHeaderCellDef>Minuto</th>
+      <td mat-cell *matCellDef="let card">{{ card.minute }}'</td>
+    </ng-container>
+
+    <ng-container matColumnDef="type">
+      <th mat-header-cell *matHeaderCellDef>Tipo</th>
+      <td mat-cell *matCellDef="let card">{{ typeLabel(card) }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Acciones</th>
+      <td mat-cell *matCellDef="let card">
+        <button mat-icon-button (click)="remove(card)" aria-label="Eliminar">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+}

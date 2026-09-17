@@ -1,0 +1,16 @@
+:host {
+  display: block;
+}
+
+.tournament-filter {
+  width: 280px;
+  margin-bottom: 8px;
+}
+
+.clickable-row {
+  cursor: pointer;
+}
+
+.clickable-row:hover {
+  background-color: var(--mat-sys-surface-container-high);
+}

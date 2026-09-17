@@ -1,0 +1,52 @@
+<mat-card class="form-card">
+  <mat-card-header>
+    <mat-card-title>{{ editing ? 'Editar equipo' : 'Nuevo equipo' }}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form [formGroup]="form" (ngSubmit)="save()">
+      <mat-form-field class="form-field-full">
+        <mat-label>Nombre</mat-label>
+        <input matInput formControlName="name" required />
+        @if (form.get('name')?.hasError('required')) {
+          <mat-error>Este campo es obligatorio.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field class="form-field-full">
+        <mat-label>Ciudad</mat-label>
+        <input matInput formControlName="city" required />
+        @if (form.get('city')?.hasError('required')) {
+          <mat-error>Este campo es obligatorio.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field class="form-field-full">
+        <mat-label>Estadio</mat-label>
+        <input matInput formControlName="stadium" required />
+        @if (form.get('stadium')?.hasError('required')) {
+          <mat-error>Este campo es obligatorio.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field class="form-field-full">
+        <mat-label>URL del logo</mat-label>
+        <input matInput formControlName="logoUrl" />
+      </mat-form-field>
+
+      <mat-form-field class="form-field-full">
+        <mat-label>Fecha de fundación</mat-label>
+        <input matInput [matDatepicker]="foundedPicker" formControlName="foundedDate" required />
+        <mat-datepicker-toggle matIconSuffix [for]="foundedPicker" />
+        <mat-datepicker #foundedPicker />
+        @if (form.get('foundedDate')?.hasError('required')) {
+          <mat-error>Este campo es obligatorio.</mat-error>
+        }
+      </mat-form-field>
+
+      <div class="form-actions">
+        <button mat-raised-button color="primary" type="submit">Guardar</button>
+        <a mat-button routerLink="/equipos">Cancelar</a>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

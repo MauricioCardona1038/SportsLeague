@@ -1,0 +1,50 @@
+<div class="list-header">
+  <h1>Patrocinadores</h1>
+  <a mat-raised-button color="primary" routerLink="/patrocinadores/nuevo">
+    <mat-icon>add</mat-icon>
+    Nuevo patrocinador
+  </a>
+</div>
+
+@if (loading()) {
+  <mat-spinner diameter="40" />
+} @else if (sponsors().length === 0) {
+  <p class="empty-state">No hay patrocinadores registrados.</p>
+} @else {
+  <table mat-table [dataSource]="sponsors()" class="mat-elevation-z1">
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Nombre</th>
+      <td mat-cell *matCellDef="let sponsor">{{ sponsor.name }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="category">
+      <th mat-header-cell *matHeaderCellDef>Categoría</th>
+      <td mat-cell *matCellDef="let sponsor">{{ categoryLabel(sponsor) }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="contactEmail">
+      <th mat-header-cell *matHeaderCellDef>Correo de contacto</th>
+      <td mat-cell *matCellDef="let sponsor">{{ sponsor.contactEmail }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="phone">
+      <th mat-header-cell *matHeaderCellDef>Teléfono</th>
+      <td mat-cell *matCellDef="let sponsor">{{ sponsor.phone || '—' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Acciones</th>
+      <td mat-cell *matCellDef="let sponsor">
+        <a mat-icon-button [routerLink]="['/patrocinadores', sponsor.id, 'editar']" aria-label="Editar">
+          <mat-icon>edit</mat-icon>
+        </a>
+        <button mat-icon-button (click)="remove(sponsor)" aria-label="Eliminar">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+}

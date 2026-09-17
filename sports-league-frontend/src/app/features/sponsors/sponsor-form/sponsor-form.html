@@ -1,0 +1,51 @@
+<mat-card class="form-card">
+  <mat-card-header>
+    <mat-card-title>{{ editing ? 'Editar patrocinador' : 'Nuevo patrocinador' }}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form [formGroup]="form" (ngSubmit)="save()">
+      <mat-form-field class="form-field-full">
+        <mat-label>Nombre</mat-label>
+        <input matInput formControlName="name" required />
+        @if (form.get('name')?.hasError('required')) {
+          <mat-error>Este campo es obligatorio.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field class="form-field-full">
+        <mat-label>Correo de contacto</mat-label>
+        <input matInput type="email" formControlName="contactEmail" required />
+        @if (form.get('contactEmail')?.hasError('required')) {
+          <mat-error>Este campo es obligatorio.</mat-error>
+        }
+        @if (form.get('contactEmail')?.hasError('email')) {
+          <mat-error>Ingrese un correo válido.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field class="form-field-full">
+        <mat-label>Teléfono</mat-label>
+        <input matInput formControlName="phone" />
+      </mat-form-field>
+
+      <mat-form-field class="form-field-full">
+        <mat-label>Sitio web</mat-label>
+        <input matInput formControlName="websiteUrl" />
+      </mat-form-field>
+
+      <mat-form-field class="form-field-full">
+        <mat-label>Categoría</mat-label>
+        <mat-select formControlName="category" required>
+          @for (option of categoryOptions; track option.value) {
+            <mat-option [value]="option.value">{{ option.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <div class="form-actions">
+        <button mat-raised-button color="primary" type="submit">Guardar</button>
+        <a mat-button routerLink="/patrocinadores">Cancelar</a>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

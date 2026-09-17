@@ -1,0 +1,66 @@
+<div class="list-header">
+  <h1>Partidos</h1>
+  <a mat-raised-button color="primary" routerLink="/partidos/nuevo">
+    <mat-icon>add</mat-icon>
+    Nuevo partido
+  </a>
+</div>
+
+<mat-form-field class="tournament-filter">
+  <mat-label>Torneo</mat-label>
+  <mat-select [value]="selectedTournamentId()" (selectionChange)="onTournamentChange($event.value)">
+    @for (tournament of tournaments(); track tournament.id) {
+      <mat-option [value]="tournament.id">{{ tournament.name }}</mat-option>
+    }
+  </mat-select>
+</mat-form-field>
+
+@if (selectedTournamentId() === null) {
+  <p class="empty-state">Seleccione un torneo para ver sus partidos.</p>
+} @else if (loading()) {
+  <mat-spinner diameter="40" />
+} @else if (matches().length === 0) {
+  <p class="empty-state">Este torneo no tiene partidos registrados.</p>
+} @else {
+  <table mat-table [dataSource]="matches()" class="mat-elevation-z1">
+    <ng-container matColumnDef="matchDate">
+      <th mat-header-cell *matHeaderCellDef>Fecha</th>
+      <td mat-cell *matCellDef="let match">{{ match.matchDate | date: 'dd/MM/yyyy HH:mm' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="homeTeamName">
+      <th mat-header-cell *matHeaderCellDef>Local</th>
+      <td mat-cell *matCellDef="let match">{{ match.homeTeamName }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="awayTeamName">
+      <th mat-header-cell *matHeaderCellDef>Visitante</th>
+      <td mat-cell *matCellDef="let match">{{ match.awayTeamName }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="matchday">
+      <th mat-header-cell *matHeaderCellDef>Jornada</th>
+      <td mat-cell *matCellDef="let match">{{ match.matchday }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef>Estado</th>
+      <td mat-cell *matCellDef="let match">{{ statusLabel(match) }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Acciones</th>
+      <td mat-cell *matCellDef="let match">
+        <a mat-icon-button [routerLink]="['/partidos', match.id, 'editar']" (click)="$event.stopPropagation()" aria-label="Editar">
+          <mat-icon>edit</mat-icon>
+        </a>
+        <button mat-icon-button (click)="remove(match, $event)" aria-label="Eliminar">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="openDetail(row)" class="clickable-row"></tr>
+  </table>
+}

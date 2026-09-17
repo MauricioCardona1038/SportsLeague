@@ -1,0 +1,30 @@
+.shell-toolbar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  row-gap: 4px;
+}
+
+.shell-title {
+  margin-right: 24px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.shell-nav {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.active-link {
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.shell-content {
+  display: block;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+}

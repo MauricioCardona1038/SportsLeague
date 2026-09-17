@@ -1,0 +1,71 @@
+<div class="list-header">
+  <h1>Torneos</h1>
+  <a mat-raised-button color="primary" routerLink="/torneos/nuevo">
+    <mat-icon>add</mat-icon>
+    Nuevo torneo
+  </a>
+</div>
+
+@if (loading()) {
+  <mat-spinner diameter="40" />
+} @else if (tournaments().length === 0) {
+  <p class="empty-state">No hay torneos registrados.</p>
+} @else {
+  <table mat-table [dataSource]="tournaments()" class="mat-elevation-z1">
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Nombre</th>
+      <td mat-cell *matCellDef="let tournament">
+        <a [routerLink]="['/torneos', tournament.id]">{{ tournament.name }}</a>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="season">
+      <th mat-header-cell *matHeaderCellDef>Temporada</th>
+      <td mat-cell *matCellDef="let tournament">{{ tournament.season }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="dates">
+      <th mat-header-cell *matHeaderCellDef>Fechas</th>
+      <td mat-cell *matCellDef="let tournament">
+        {{ tournament.startDate | date: 'dd/MM/yyyy' }} - {{ tournament.endDate | date: 'dd/MM/yyyy' }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef>Estado</th>
+      <td mat-cell *matCellDef="let tournament">
+        <button mat-button [matMenuTriggerFor]="statusMenu">
+          {{ statusLabel(tournament) }}
+          <mat-icon>arrow_drop_down</mat-icon>
+        </button>
+        <mat-menu #statusMenu="matMenu">
+          @for (status of statusOptions; track status) {
+            <button mat-menu-item (click)="changeStatus(tournament, status)">
+              {{ statusOptionLabel(status) }}
+            </button>
+          }
+        </mat-menu>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="teamsCount">
+      <th mat-header-cell *matHeaderCellDef>Equipos</th>
+      <td mat-cell *matCellDef="let tournament">{{ tournament.teamsCount }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Acciones</th>
+      <td mat-cell *matCellDef="let tournament">
+        <a mat-icon-button [routerLink]="['/torneos', tournament.id, 'editar']" aria-label="Editar">
+          <mat-icon>edit</mat-icon>
+        </a>
+        <button mat-icon-button (click)="remove(tournament)" aria-label="Eliminar">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+}

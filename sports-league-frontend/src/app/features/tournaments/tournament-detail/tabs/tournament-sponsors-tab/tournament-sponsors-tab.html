@@ -1,0 +1,68 @@
+<div class="link-form">
+  <mat-form-field>
+    <mat-label>Patrocinador</mat-label>
+    <mat-select [value]="selectedSponsorId()" (selectionChange)="selectedSponsorId.set($event.value)">
+      @for (sponsor of allSponsors(); track sponsor.id) {
+        <mat-option [value]="sponsor.id">{{ sponsor.name }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Monto del contrato</mat-label>
+    <input
+      matInput
+      type="number"
+      min="0"
+      [ngModel]="contractAmount()"
+      (ngModelChange)="contractAmount.set($event)"
+    />
+  </mat-form-field>
+
+  <button
+    mat-raised-button
+    color="primary"
+    [disabled]="selectedSponsorId() === null || contractAmount() === null"
+    (click)="linkSelectedSponsor()"
+  >
+    Vincular patrocinador
+  </button>
+</div>
+
+@if (linkedSponsors().length === 0) {
+  <p class="empty-state">Este torneo no tiene patrocinadores vinculados.</p>
+} @else {
+  <table mat-table [dataSource]="linkedSponsors()" class="mat-elevation-z1">
+    <ng-container matColumnDef="sponsorName">
+      <th mat-header-cell *matHeaderCellDef>Patrocinador</th>
+      <td mat-cell *matCellDef="let sponsorship">{{ sponsorship.sponsorName }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="sponsorCategory">
+      <th mat-header-cell *matHeaderCellDef>Categoría</th>
+      <td mat-cell *matCellDef="let sponsorship">{{ categoryLabel(sponsorship.sponsorCategory) }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="contractAmount">
+      <th mat-header-cell *matHeaderCellDef>Monto del contrato</th>
+      <td mat-cell *matCellDef="let sponsorship">{{ sponsorship.contractAmount | number: '1.2-2' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="joinedAt">
+      <th mat-header-cell *matHeaderCellDef>Vinculado desde</th>
+      <td mat-cell *matCellDef="let sponsorship">{{ sponsorship.joinedAt | date: 'dd/MM/yyyy' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Acciones</th>
+      <td mat-cell *matCellDef="let sponsorship">
+        <button mat-icon-button (click)="unlink(sponsorship)" aria-label="Eliminar">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+}

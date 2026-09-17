@@ -1,0 +1,37 @@
+@if (match(); as m) {
+  <div class="detail-header">
+    <div>
+      <h1>{{ m.homeTeamName }} vs {{ m.awayTeamName }}</h1>
+      <p>
+        {{ m.matchDate | date: 'dd/MM/yyyy HH:mm' }} · {{ m.venue }} · Jornada {{ m.matchday }} ·
+        Estado: {{ statusLabels[m.status] }}
+      </p>
+      <p>Torneo: {{ m.tournamentName }} · Árbitro: {{ m.refereeFullName }}</p>
+    </div>
+    <a mat-raised-button color="primary" [routerLink]="['/partidos', m.id, 'editar']">
+      <mat-icon>edit</mat-icon>
+      Editar
+    </a>
+  </div>
+
+  <mat-tab-group>
+    <mat-tab label="Resultado">
+      <app-match-result-tab [matchId]="m.id" />
+    </mat-tab>
+    <mat-tab label="Goles">
+      <app-match-goals-tab [matchId]="m.id" [homeTeamId]="m.homeTeamId" [awayTeamId]="m.awayTeamId" />
+    </mat-tab>
+    <mat-tab label="Tarjetas">
+      <app-match-cards-tab [matchId]="m.id" [homeTeamId]="m.homeTeamId" [awayTeamId]="m.awayTeamId" />
+    </mat-tab>
+    <mat-tab label="Alineación">
+      <app-match-lineup-tab
+        [matchId]="m.id"
+        [homeTeamId]="m.homeTeamId"
+        [awayTeamId]="m.awayTeamId"
+        [homeTeamName]="m.homeTeamName"
+        [awayTeamName]="m.awayTeamName"
+      />
+    </mat-tab>
+  </mat-tab-group>
+}

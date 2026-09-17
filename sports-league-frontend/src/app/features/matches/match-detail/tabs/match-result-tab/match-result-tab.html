@@ -1,0 +1,32 @@
+@if (loaded()) {
+  @if (result(); as r) {
+    <div class="result-summary">
+      <p class="score">{{ r.homeGoals }} - {{ r.awayGoals }}</p>
+      @if (r.observations) {
+        <p>Observaciones: {{ r.observations }}</p>
+      }
+    </div>
+  } @else {
+    <form [formGroup]="form" (ngSubmit)="save()">
+      <div class="score-row">
+        <mat-form-field>
+          <mat-label>Goles local</mat-label>
+          <input matInput type="number" min="0" formControlName="homeGoals" required />
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Goles visitante</mat-label>
+          <input matInput type="number" min="0" formControlName="awayGoals" required />
+        </mat-form-field>
+      </div>
+      <mat-form-field class="form-field-full">
+        <mat-label>Observaciones</mat-label>
+        <textarea matInput formControlName="observations" rows="3"></textarea>
+      </mat-form-field>
+      <button mat-raised-button color="primary" type="submit">Guardar resultado</button>
+    </form>
+  }
+
+  <div class="finish-action">
+    <button mat-stroked-button (click)="markFinished()">Marcar como finalizado</button>
+  </div>
+}

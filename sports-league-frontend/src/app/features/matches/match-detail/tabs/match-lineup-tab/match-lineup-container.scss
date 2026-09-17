@@ -1,0 +1,10 @@
+.lineup-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  padding-top: 16px;
+
+  @media (max-width: 720px) {
+    grid-template-columns: 1fr;
+  }
+}

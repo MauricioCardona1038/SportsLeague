@@ -1,0 +1,26 @@
+<h1>Estadísticas</h1>
+
+<mat-form-field class="tournament-select">
+  <mat-label>Torneo</mat-label>
+  <mat-select [value]="selectedTournamentId()" (selectionChange)="selectedTournamentId.set($event.value)">
+    @for (tournament of tournaments(); track tournament.id) {
+      <mat-option [value]="tournament.id">{{ tournament.name }}</mat-option>
+    }
+  </mat-select>
+</mat-form-field>
+
+@if (selectedTournamentId(); as tournamentId) {
+  <mat-tab-group>
+    <mat-tab label="Tabla de posiciones">
+      <app-standings-table-tab [tournamentId]="tournamentId" />
+    </mat-tab>
+    <mat-tab label="Goleadores">
+      <app-top-scorers-tab [tournamentId]="tournamentId" />
+    </mat-tab>
+    <mat-tab label="Tarjetas">
+      <app-card-stats-tab [tournamentId]="tournamentId" />
+    </mat-tab>
+  </mat-tab-group>
+} @else {
+  <p class="empty-state">Seleccione un torneo para ver sus estadísticas.</p>
+}

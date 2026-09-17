@@ -1,0 +1,37 @@
+<div class="register-form">
+  <mat-form-field>
+    <mat-label>Inscribir equipo</mat-label>
+    <mat-select [value]="selectedTeamId()" (selectionChange)="selectedTeamId.set($event.value)">
+      @for (team of availableTeams(); track team.id) {
+        <mat-option [value]="team.id">{{ team.name }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+  <button mat-raised-button color="primary" [disabled]="selectedTeamId() === null" (click)="registerSelectedTeam()">
+    Inscribir equipo
+  </button>
+</div>
+
+@if (registeredTeams().length === 0) {
+  <p class="empty-state">Este torneo no tiene equipos inscritos.</p>
+} @else {
+  <table mat-table [dataSource]="registeredTeams()" class="mat-elevation-z1">
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Nombre</th>
+      <td mat-cell *matCellDef="let team">{{ team.name }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="city">
+      <th mat-header-cell *matHeaderCellDef>Ciudad</th>
+      <td mat-cell *matCellDef="let team">{{ team.city }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="stadium">
+      <th mat-header-cell *matHeaderCellDef>Estadio</th>
+      <td mat-cell *matCellDef="let team">{{ team.stadium }}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+}

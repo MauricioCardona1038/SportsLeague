@@ -37,3 +37,35 @@ body {
   height: 100%;
 }
 /* You can add global styles to this file, and also import other style files */
+
+.list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.empty-state {
+  color: var(--mat-sys-on-surface-variant);
+  font-style: italic;
+}
+
+table[mat-table] {
+  width: 100%;
+}
+
+.form-card {
+  max-width: 640px;
+}
+
+.form-field-full {
+  width: 100%;
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}

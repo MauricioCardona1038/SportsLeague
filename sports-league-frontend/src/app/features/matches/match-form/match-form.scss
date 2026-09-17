@@ -1,0 +1,20 @@
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.date-time-row {
+  display: flex;
+  gap: 16px;
+
+  mat-form-field {
+    flex: 1;
+  }
+}
+
+.field-error {
+  color: var(--mat-sys-error);
+  font-size: 0.85rem;
+  margin: -8px 0 8px;
+}
